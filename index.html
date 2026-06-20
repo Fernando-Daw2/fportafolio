@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fernando Porta Aguilera — Analista Programador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:       #0A0F1E;
+    --surface:  #111827;
+    --surface2: #1E293B;
+    --border:   #1E3A5F;
+    --accent:   #3B82F6;
+    --accent2:  #10B981;
+    --text:     #EDF2F7;
+    --muted:    #94A3B8;
+    --display:  'Space Grotesk', sans-serif;
+    --body:     'Inter', sans-serif;
+    --mono:     'JetBrains Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 5vw;
+    background: rgba(10,15,30,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: .85rem;
+    color: var(--accent);
+    letter-spacing: .05em;
+  }
+  .nav-logo span { color: var(--accent2); }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .82rem;
+    font-family: var(--mono);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    transition: color .2s;
+  }
+  nav ul a:hover { color: var(--text); }
+
+  /* ── SECTIONS ── */
+  section { padding: 6rem 5vw; max-width: 1100px; margin: 0 auto; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 100%;
+    padding: 0 5vw;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    padding-top: 5rem;
+  }
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--accent2);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+  h1 {
+    font-family: var(--display);
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: 1rem;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .hero-subtitle {
+    color: var(--muted);
+    font-size: 1.05rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    max-width: 42ch;
+  }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .7rem 1.5rem;
+    border-radius: 6px;
+    font-size: .87rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all .2s;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #2563EB; transform: translateY(-1px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--text); }
+
+  /* Terminal */
+  .terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: .82rem;
+  }
+  .terminal-bar {
+    background: var(--surface2);
+    padding: .6rem 1rem;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot-r { background: #EF4444; }
+  .dot-y { background: #F59E0B; }
+  .dot-g { background: #10B981; }
+  .terminal-body { padding: 1.4rem 1.4rem 1.6rem; }
+  .t-line { margin-bottom: .45rem; color: var(--muted); }
+  .t-prompt { color: var(--accent2); }
+  .t-cmd { color: var(--text); }
+  .t-out { color: var(--accent); }
+  .t-cursor {
+    display: inline-block; width: 8px; height: 1em;
+    background: var(--accent2); vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* BG grid */
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: .12;
+    pointer-events: none;
+  }
+  #hero::after {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    border-top: 1px solid var(--border);
+  }
+  .section-label {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--accent2);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    margin-bottom: 2.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1; max-width: 80px;
+    height: 1px;
+    background: var(--border);
+  }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  h2 {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    margin-bottom: 1.2rem;
+  }
+  .about-text { color: var(--muted); line-height: 1.8; }
+  .about-text + .about-text { margin-top: 1rem; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    transition: border-color .2s;
+  }
+  .stat-card:hover { border-color: var(--accent); }
+  .stat-num {
+    font-family: var(--display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: .25rem;
+  }
+  .stat-label { font-size: .8rem; color: var(--muted); }
+
+  /* ── SKILLS ── */
+  #skills { border-top: 1px solid var(--border); }
+  .skills-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .skill-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    transition: border-color .2s;
+  }
+  .skill-group:hover { border-color: var(--accent); }
+  .skill-group-title {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--accent2);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .tag {
+    display: inline-block;
+    padding: .25rem .65rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: .73rem;
+    color: var(--muted);
+    transition: all .2s;
+  }
+  .tag:hover { color: var(--text); border-color: var(--accent); }
+  .tag.hot { color: var(--accent); border-color: rgba(59,130,246,.3); background: rgba(59,130,246,.07); }
+
+  /* ── EXPERIENCE ── */
+  #experience { border-top: 1px solid var(--border); }
+  .timeline { position: relative; margin-top: 2.5rem; padding-left: 1.5rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: .6rem; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent) 0%, var(--border) 60%, transparent 100%);
+  }
+  .job {
+    position: relative;
+    padding: 0 0 2.8rem 2rem;
+  }
+  .job::before {
+    content: '';
+    position: absolute;
+    left: -4px; top: .6rem;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59,130,246,.2);
+  }
+  .job.current::before {
+    background: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(16,185,129,.2), 0 0 8px var(--accent2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 3px rgba(16,185,129,.2), 0 0 8px var(--accent2); }
+    50% { box-shadow: 0 0 0 6px rgba(16,185,129,.1), 0 0 16px var(--accent2); }
+  }
+  .job-meta {
+    display: flex; align-items: center; gap: .8rem;
+    margin-bottom: .5rem;
+    flex-wrap: wrap;
+  }
+  .job-company {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .job-date {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .job-role {
+    font-size: .87rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: .8rem;
+  }
+  .job-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+
+  /* ── PROJECTS ── */
+  #projects { border-top: 1px solid var(--border); }
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.8rem;
+    transition: all .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .3s;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-title {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: .6rem;
+    color: var(--text);
+  }
+  .project-desc {
+    font-size: .84rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .project-card .job-tags { margin-top: auto; }
+  .project-card.featured {
+    grid-column: span 2;
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(59,130,246,.05) 100%);
+  }
+
+  /* ── EDUCATION ── */
+  #education { border-top: 1px solid var(--border); }
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2.5rem; }
+  .edu-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    transition: border-color .2s;
+  }
+  .edu-card:hover { border-color: var(--accent); }
+  .edu-degree {
+    font-family: var(--display);
+    font-size: .95rem;
+    font-weight: 600;
+    margin-bottom: .4rem;
+  }
+  .edu-school { font-size: .82rem; color: var(--accent2); margin-bottom: .2rem; }
+  .edu-loc { font-size: .78rem; color: var(--muted); font-family: var(--mono); }
+  .cert-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+  .cert-badge {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .4rem .9rem;
+    background: rgba(16,185,129,.08);
+    border: 1px solid rgba(16,185,129,.25);
+    border-radius: 20px;
+    font-size: .78rem;
+    color: var(--accent2);
+    font-family: var(--mono);
+  }
+
+  /* ── CONTACT ── */
+  #contact {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding-bottom: 5rem;
+  }
+  #contact h2 { margin-bottom: 1rem; }
+  #contact p { color: var(--muted); margin-bottom: 2.5rem; }
+  .contact-links { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .8rem 1.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: .87rem;
+    transition: all .2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--text); }
+  .contact-link svg { width: 16px; height: 16px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 2rem 5vw;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+  }
+  footer span { color: var(--accent2); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .skills-cols { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: span 1; }
+    .edu-grid { grid-template-columns: 1fr; }
+    nav ul { gap: 1rem; }
+  }
+  @media (max-width: 500px) {
+    .skills-cols { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">fpa<span>.</span>dev</div>
+  <ul>
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#experience">Experiencia</a></li>
+    <li><a href="#projects">Proyectos</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-grid">
+    <div>
+      <p class="hero-eyebrow">// Analista Programador · Zaragoza, España</p>
+      <h1>Fernando<br/><em>Porta</em><br/>Aguilera</h1>
+      <p class="hero-subtitle">
+        Desarrollador Full Stack con +9 años de experiencia. Especializado en arquitecturas Java modernas, microservicios y desarrollo de IA local.
+      </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">Ver proyectos</a>
+        <a href="#contact" class="btn btn-ghost">Contactar</a>
+      </div>
+    </div>
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span style="margin-left:.5rem; color:var(--muted); font-family:var(--mono); font-size:.72rem;">~/fernando-porta</span>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line"><span class="t-prompt">❯ </span><span class="t-cmd">whoami</span></div>
+        <div class="t-line"><span class="t-out">Fernando Porta Aguilera</span></div>
+        <div class="t-line" style="margin-top:.6rem"><span class="t-prompt">❯ </span><span class="t-cmd">cat stack.txt</span></div>
+        <div class="t-line"><span class="t-out">Java 21/25 · Spring Boot 4</span></div>
+        <div class="t-line"><span class="t-out">Kafka · gRPC · Docker</span></div>
+        <div class="t-line"><span class="t-out">DDD · Hexagonal Arch</span></div>
+        <div class="t-line"><span class="t-out">Python · Ollama · Claude Code</span></div>
+        <div class="t-line" style="margin-top:.6rem"><span class="t-prompt">❯ </span><span class="t-cmd">node --version</span></div>
+        <div class="t-line"><span class="t-out">v9+ años de experiencia</span></div>
+        <div class="t-line" style="margin-top:.6rem"><span class="t-prompt">❯ </span><span class="t-cmd" id="typeTarget"></span><span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">Sobre mí</div>
+  <div class="about-grid">
+    <div>
+      <h2>Construyo sistemas que escalan y<br/><em style="font-style:normal;color:var(--accent)">razonan</em></h2>
+      <p class="about-text">
+        Con más de 9 años en el sector, he recorrido el camino completo: desde desarrollador junior full-stack hasta Tech Lead, pasando por arquitecturas complejas en banca, sector público y logística.
+      </p>
+      <p class="about-text">
+        Actualmente trabajo en BTS aplicando IA (Claude Code, Ollama) junto con Java moderno, Kafka y arquitectura hexagonal — convencido de que la IA y el software empresarial deben ir de la mano.
+      </p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-num">9+</span>
+        <span class="stat-label">Años de experiencia</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">6+</span>
+        <span class="stat-label">Proyectos entregados</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">20+</span>
+        <span class="stat-label">Tecnologías dominadas</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">2</span>
+        <span class="stat-label">Títulos superiores TIC</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">Stack técnico</div>
+  <h2>Tecnologías</h2>
+  <div class="skills-cols">
+    <div class="skill-group">
+      <div class="skill-group-title">Backend</div>
+      <div class="skill-tags">
+        <span class="tag hot">Java 21/25</span>
+        <span class="tag hot">Spring Boot 4</span>
+        <span class="tag hot">Spring Integration</span>
+        <span class="tag">Kafka</span>
+        <span class="tag">gRPC</span>
+        <span class="tag">API REST</span>
+        <span class="tag">Microservicios</span>
+        <span class="tag">Hibernate</span>
+        <span class="tag">GraphQL</span>
+        <span class="tag">Python</span>
+        <span class="tag">PL/SQL</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Frontend</div>
+      <div class="skill-tags">
+        <span class="tag">Angular</span>
+        <span class="tag">React</span>
+        <span class="tag">HTML5</span>
+        <span class="tag">CSS3</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Thymeleaf</span>
+        <span class="tag">JSP</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">IA & DevOps</div>
+      <div class="skill-tags">
+        <span class="tag hot">Claude Code</span>
+        <span class="tag hot">Ollama</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Jenkins</span>
+        <span class="tag">GitLab</span>
+        <span class="tag">Git</span>
+        <span class="tag">Azure</span>
+        <span class="tag">Camunda BPM</span>
+        <span class="tag">Apache Solr</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Arquitectura</div>
+      <div class="skill-tags">
+        <span class="tag hot">DDD</span>
+        <span class="tag hot">Hexagonal</span>
+        <span class="tag">Microservicios</span>
+        <span class="tag">Event-Driven</span>
+        <span class="tag">Scrum</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Bases de datos</div>
+      <div class="skill-tags">
+        <span class="tag">Oracle DB</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">SQL</span>
+        <span class="tag">PL/SQL avanzado</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">IA Local</div>
+      <div class="skill-tags">
+        <span class="tag hot">llama3.2</span>
+        <span class="tag hot">Ollama</span>
+        <span class="tag">Flask</span>
+        <span class="tag">Load Balancing</span>
+        <span class="tag">Multi-node</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">Trayectoria</div>
+  <h2>Experiencia laboral</h2>
+  <div class="timeline">
+
+    <div class="job current">
+      <div class="job-meta">
+        <span class="job-company">BTS — Business Telecommunications Services</span>
+        <span class="job-date">Mar 2026 – Actualidad</span>
+      </div>
+      <div class="job-role">Analista Programador · Zaragoza</div>
+      <div class="job-tags">
+        <span class="tag hot">IA / Claude Code</span>
+        <span class="tag hot">Java 21/25</span>
+        <span class="tag hot">Spring Boot 4</span>
+        <span class="tag">Kafka</span>
+        <span class="tag">gRPC</span>
+        <span class="tag">DDD</span>
+        <span class="tag">Hexagonal</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Jenkins</span>
+        <span class="tag">Ollama</span>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta">
+        <span class="job-company">DXC Technology</span>
+        <span class="job-date">Ago 2025 – Mar 2026</span>
+      </div>
+      <div class="job-role">Tech Lead Java / Angular</div>
+      <div class="job-tags">
+        <span class="tag">Java</span>
+        <span class="tag">Angular</span>
+        <span class="tag">Tech Lead</span>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta">
+        <span class="job-company">DXC Technology</span>
+        <span class="job-date">Oct 2024 – Ago 2025</span>
+      </div>
+      <div class="job-role">Desarrollador Sénior Java / Angular</div>
+      <div class="job-tags">
+        <span class="tag">Java</span>
+        <span class="tag">Angular</span>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta">
+        <span class="job-company">ISYC</span>
+        <span class="job-date">Feb 2022 – Oct 2024</span>
+      </div>
+      <div class="job-role">Desarrollador Full Stack Java / React</div>
+      <div class="job-tags">
+        <span class="tag">Java</span>
+        <span class="tag">React</span>
+        <span class="tag">GraphQL</span>
+        <span class="tag">Spring Boot</span>
+        <span class="tag">Microservicios</span>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-meta">
+        <span class="job-company">ISYC</span>
+        <span class="job-date">Nov 2016 – Feb 2022</span>
+      </div>
+      <div class="job-role">Desarrollador Junior Front / Back</div>
+      <div class="job-tags">
+        <span class="tag">Java</span>
+        <span class="tag">JSP</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Spring</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">Proyectos</div>
+  <h2>Lo que he construido</h2>
+  <div class="projects-grid">
+
+    <div class="project-card featured">
+      <div class="project-title">🤖 Agente IA Multinodo con Modelos Locales</div>
+      <div class="project-desc">
+        Agente de chat inspirado en Claude Code, basado en llama3.2 ejecutado en Ollama sobre dos ordenadores conectados en la misma red con un balanceador de carga para distribución de trabajo. Explora la arquitectura distribuida aplicada a modelos de lenguaje locales.
+      </div>
+      <div class="job-tags">
+        <span class="tag hot">Ollama</span>
+        <span class="tag hot">llama3.2</span>
+        <span class="tag">Python</span>
+        <span class="tag">Load Balancer</span>
+        <span class="tag">Multi-node</span>
+        <span class="tag">IA Local</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">🏛️ Adjudicación de Contratos — Sector Público</div>
+      <div class="project-desc">
+        Sistema completo para la contratación pública: publicación en PLACSP, flujos gestionados por Camunda BPM e integraciones de contratación pública.
+      </div>
+      <div class="job-tags">
+        <span class="tag">Java 11</span>
+        <span class="tag">Spring Boot</span>
+        <span class="tag">GraphQL</span>
+        <span class="tag">Angular 14</span>
+        <span class="tag">Camunda BPM</span>
+        <span class="tag">Oracle</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">🏦 Gestión de Incidencias Bancarias</div>
+      <div class="project-desc">
+        Portal de tickets para oficinas bancarias: formulario JSP para empleados, gestión de estados, notificaciones por correo y login integrado con Azure AD.
+      </div>
+      <div class="job-tags">
+        <span class="tag">Java 8</span>
+        <span class="tag">Spring</span>
+        <span class="tag">JSP</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Azure</span>
+        <span class="tag">REST</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">🔍 FAQ por Búsqueda de Contenido — Aeropuerto</div>
+      <div class="project-desc">
+        Buscador semántico para operarios de atención al cliente. Búsqueda full-text en Apache Solr sobre documentos internos para resolver consultas en tiempo real.
+      </div>
+      <div class="job-tags">
+        <span class="tag">Java 8</span>
+        <span class="tag">Apache Solr</span>
+        <span class="tag">Spring</span>
+        <span class="tag">JSP</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">🏦 Alta de Clientes — Portal Bancario</div>
+      <div class="project-desc">
+        Onboarding digital de nuevos clientes: flujo multi-pantalla en ReactJS con llamadas a microservicios para validación, generación de encuestas y análisis de documentos.
+      </div>
+      <div class="job-tags">
+        <span class="tag">Java 8</span>
+        <span class="tag">React</span>
+        <span class="tag">GraphQL</span>
+        <span class="tag">Microservicios</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-title">📦 Gestión de Albaranes — Logística</div>
+      <div class="project-desc">
+        Sistema de gestión de albaranes para almacén: carga masiva de PDFs en ZIP, análisis automático para identificar clientes, exportación a Excel y renombrado inteligente de archivos.
+      </div>
+      <div class="job-tags">
+        <span class="tag">Java 11</span>
+        <span class="tag">Spring Boot</span>
+        <span class="tag">Thymeleaf</span>
+        <span class="tag">GraphQL</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">Formación</div>
+  <h2>Educación</h2>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-degree">Técnico Superior en Desarrollo de Aplicaciones Web</div>
+      <div class="edu-school">CPIFP Los Enlaces</div>
+      <div class="edu-loc">Zaragoza, España</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-degree">Técnico Superior en Desarrollo de Aplicaciones Multiplataforma</div>
+      <div class="edu-school">CPIFP Los Enlaces</div>
+      <div class="edu-loc">Zaragoza, España</div>
+    </div>
+  </div>
+  <div class="cert-row">
+    <span class="cert-badge">✓ Professional Scrum Developer I</span>
+    <span class="cert-badge">✓ Oracle DB: SQL Fundamentals I y II</span>
+    <span class="cert-badge">✓ Oracle DB 11g: Advanced PL/SQL</span>
+    <span class="cert-badge">✓ Oracle DB: Program with PL/SQL</span>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label" style="justify-content:center">Contacto</div>
+  <h2>¿Hablamos?</h2>
+  <p>Abierto a nuevas oportunidades, colaboraciones técnicas e ideas interesantes.</p>
+  <div class="contact-links">
+    <a href="mailto:fernandoportaguilera@gmail.com" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
+      fernandoportaguilera@gmail.com
+    </a>
+    <a href="tel:+34680142252" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.81a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      (+34) 680 14 22 52
+    </a>
+    <a href="https://www.linkedin.com/in/fernando-porta-bb127b2b3" target="_blank" class="contact-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      LinkedIn
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span>Fernando Porta Aguilera</span> · fpa.dev · Zaragoza, España · 2026
+</footer>
+
+<script>
+  // Terminal typing effect
+  const phrases = [
+    'git log --oneline',
+    'docker compose up',
+    'mvn spring-boot:run',
+    'ollama run llama3.2',
+  ];
+  let pi = 0, ci = 0, deleting = false;
+  const el = document.getElementById('typeTarget');
+  function type() {
+    const phrase = phrases[pi];
+    if (!deleting) {
+      el.textContent = phrase.slice(0, ++ci);
+      if (ci === phrase.length) { deleting = true; setTimeout(type, 1600); return; }
+    } else {
+      el.textContent = phrase.slice(0, --ci);
+      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+    }
+    setTimeout(type, deleting ? 40 : 70);
+  }
+  setTimeout(type, 1200);
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.job, .project-card, .skill-group, .edu-card, .stat-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
